@@ -97,6 +97,7 @@ snippet-expand() {
     parse-snippet
     LBUFFER=$snippet_new_lbuffer
     LBUFFER+=${snippets[$snippet_match]:-$snippet_match}
+    zle self-insert
 }
 zle -N snippet-expand
 
@@ -212,3 +213,14 @@ snippet-add tv     "| ${VISUAL:-${EDITOR:-nano}} "
 snippet-add tc     "| cut "
 snippet-add tu     "| uniq "
 snippet-add tx     "| xargs "
+
+# set up key bindings like http://zshwiki.org/home/examples/zleiab
+
+snippet-noexpand() {
+  LBUFFER+=' '
+}
+zle -N snippet-noexpand
+
+bindkey " " snippet-expand
+bindkey "^x " snippet-noexpand
+bindkey -M isearch " " self-insert
